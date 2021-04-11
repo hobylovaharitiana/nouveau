@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PersonneController!{% endblock %}
+
+{% block body %}
+    <h1>Lise des personnes</h1>
+    <p><a href="{{ path('add_personne') }}">Ajouter un personne</a></p>
+    <table>
+        <thead>
+            <th>id</th>
+            <th>nomPersonne</th>
+            <th>prenomPersonne</th>
+            <th>emailPersonne</th>
+            <th>telephone</th>
+            <th>adresse</th>
+        </thead>
+        {% for personne in personnes %}
+        <tbody>
+            <td>{{ personne.id }}</td>
+            <td>{{ personne.nomPersonne }}</td>
+            <td>{{ personne.prenomPersonne }}</td>
+            <td>{{ personne.emailPersonne }}</td>
+            <td>{{ personne.telephone }}</td>
+            <td>{{ personne.adresse }}</td>
+            <td><a href="{{ path('modify_personne', {'id': personne.id}) }}">Modifier</a></td>
+            <td><a href="{{ path('delete_personne', {'id': personne.id}) }}">Supprimer</a></td>
+        </tbody>
+        {% endfor %}
+    </table>
+{% endblock %}
