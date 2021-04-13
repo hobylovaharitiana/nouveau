@@ -1,0 +1,22 @@
+{% extends 'base.html.twig'%}
+
+{% block title %}Hello TypePersonneController!{% endblock %}
+
+{% block body %}
+    <h1>Lise des typePersonnes </h1>
+    <p><a href="{{ path('add_typePersonne') }}">Ajouter un typePersonne</a></p>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>nomType</th>
+        </thead>
+        {% for typePersonne in typePersonnes %}
+            <tbody>
+                <td>{{ typePersonne.id}} </td>
+                <td>{{ typePersonne.nomType}} </td>
+                <td><a href="{{ path('modify_typePersonne', {'id': typePersonne.id}) }}">Modifier</a></td>
+                <td><a href="{{ path('delete_typePersonne', {'id': typePersonne.id}) }}">Supprimer</a></td>
+            </tbody>
+        {% endfor %}
+    </table>
+{% endblock %}
