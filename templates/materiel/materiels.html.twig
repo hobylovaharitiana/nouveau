@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MaterielController!{% endblock %}
+
+{% block body %}
+    <h1>Lise des produits</h1>
+    <p><a href="{{ path('add_materiel') }}">Ajouter un materiel</a></p>
+
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Maque</th>
+            <th>Caracteristiques</th>
+        </thead>
+        {% for materiel in materiels %}
+        <tbody>
+            <td>{{ materiel.id }}</td>
+            <td>{{ materiel.nomMateriel }}</td>
+            <td>{{ materiel.marqueMateriel }}</td>
+            <td>{{ materiel.caracteristique }}</td>
+            <td><a href="{{ path('modify_materiel', {'id': materiel.id}) }}">Modifier</a></td>
+            <td><a href="{{ path('delete_materiel', {'id': materiel.id}) }}">Supprimer</a></td>
+        </tbody>
+        {% endfor %}
+    </table>
+{% endblock %}
