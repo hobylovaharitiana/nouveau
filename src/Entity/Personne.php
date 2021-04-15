@@ -42,6 +42,12 @@ class Personne
      */
     private $adresse;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=PersonneType::class, inversedBy="personne")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $personneType;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +109,18 @@ class Personne
     public function setAdresse(string $adresse): self
     {
         $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getPersonneType(): ?PersonneType
+    {
+        return $this->personneType;
+    }
+
+    public function setPersonneType(?PersonneType $personneType): self
+    {
+        $this->personneType = $personneType;
 
         return $this;
     }

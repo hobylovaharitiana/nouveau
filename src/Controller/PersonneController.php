@@ -77,4 +77,14 @@ class PersonneController extends AbstractController
 
         return $this->redirectToRoute('read_personne');
     }
+    /**
+     * @Route("/personne", name="liste_personne")
+     */
+    public function listePersonne()
+    {
+        $personnes = $this->getDoctrine()->getRepository(Personne::class)->getListePersonne();
+        return $this->render("personne/personnes.html.twig", [
+            "personnes" => $personnes,
+        ]);
+    }
 }

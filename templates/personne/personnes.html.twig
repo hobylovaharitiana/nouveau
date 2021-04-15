@@ -13,6 +13,7 @@
             <th>emailPersonne</th>
             <th>telephone</th>
             <th>adresse</th>
+            <th>type</th>
         </thead>
         {% for personne in personnes %}
         <tbody>
@@ -22,6 +23,7 @@
             <td>{{ personne.emailPersonne }}</td>
             <td>{{ personne.telephone }}</td>
             <td>{{ personne.adresse }}</td>
+            <th>{{ personne.personneType.nomType }}</th>
             <td><a href="{{ path('modify_personne', {'id': personne.id}) }}">Modifier</a></td>
             <td><a href="{{ path('delete_personne', {'id': personne.id}) }}">Supprimer</a></td>
         </tbody>
