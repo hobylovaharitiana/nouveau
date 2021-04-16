@@ -49,9 +49,15 @@ class Personne
      */
     private $materiels;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PersonneType::class, mappedBy="personne")
+     */
+    private $personneType;
+
     public function __construct()
     {
         $this->materiels = new ArrayCollection();
+        $this->personneType = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,6 +149,36 @@ class Personne
             // set the owning side to null (unless already changed)
             if ($materiel->getPersonnes() === $this) {
                 $materiel->setPersonnes(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PersonneType[]
+     */
+    public function getPersonneType(): Collection
+    {
+        return $this->personneType;
+    }
+
+    public function addPersonneType(PersonneType $personneType): self
+    {
+        if (!$this->personneType->contains($personneType)) {
+            $this->personneType[] = $personneType;
+            $personneType->setPersonne($this);
+        }
+
+        return $this;
+    }
+
+    public function removePersonneType(PersonneType $personneType): self
+    {
+        if ($this->personneType->removeElement($personneType)) {
+            // set the owning side to null (unless already changed)
+            if ($personneType->getPersonne() === $this) {
+                $personneType->setPersonne(null);
             }
         }
 
