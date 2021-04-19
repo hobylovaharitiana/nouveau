@@ -50,9 +50,11 @@ class Personne
     private $materiels;
 
     /**
-     * @ORM\OneToMany(targetEntity=PersonneType::class, mappedBy="personne")
+     * @ORM\ManyToOne(targetEntity=PersonneType::class)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $personneType;
+
 
     public function __construct()
     {
@@ -155,33 +157,19 @@ class Personne
         return $this;
     }
 
-    /**
-     * @return Collection|PersonneType[]
-     */
-    public function getPersonneType(): Collection
+    public function getPersonneType(): ?PersonneType
     {
         return $this->personneType;
     }
 
-    public function addPersonneType(PersonneType $personneType): self
+    public function setPersonneType(?PersonneType $personneType): self
     {
-        if (!$this->personneType->contains($personneType)) {
-            $this->personneType[] = $personneType;
-            $personneType->setPersonne($this);
-        }
+        $this->personneType = $personneType;
 
         return $this;
     }
 
-    public function removePersonneType(PersonneType $personneType): self
-    {
-        if ($this->personneType->removeElement($personneType)) {
-            // set the owning side to null (unless already changed)
-            if ($personneType->getPersonne() === $this) {
-                $personneType->setPersonne(null);
-            }
-        }
 
-        return $this;
-    }
+
+
 }

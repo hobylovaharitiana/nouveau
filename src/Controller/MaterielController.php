@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Materiel;
 use App\Entity\Personne;
 use App\Form\MaterielFormType;
+use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\DocBlock\Description;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,23 +17,31 @@ class MaterielController extends AbstractController
     /**
      * @Route("/add-materiel", name="add_materiel")
      */
-    public function addMateriel(Request $request): Response
+    public function addMateriel(Request $request, EntityManagerInterface $entityManager): Response
     {
         $materiel = new Materiel();
         $form = $this->createForm(MaterielFormType::class, $materiel);
         $form->handleRequest($request);
 
+        $personnes = $entityManager->getRepository(Personne::class)->findUtilisateur();
+        //dd($personnes);
+        $personne = $request->request->get('personne');
+
+
         if ($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
+            $person = $entityManager->getRepository(Personne::class)->find((int)$personne);
+            $materiel->setPersonnes($person);
             $entityManager->persist($materiel);
             $entityManager->flush();
             return $this->redirectToRoute('read_materiel');
+           // dd($personne);
 
         }
         return $this->render('materiel/materiel-form.html.twig', [
            "form_title" => "Ajouter un materiel",
            "form_materiel" => $form->createView(),
+            "personnes" => $personnes
         ]);
     }
     /**

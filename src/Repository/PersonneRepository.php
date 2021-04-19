@@ -47,4 +47,22 @@ class PersonneRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findUtilisateur()
+    {
+        return $this->createQueryBuilder('p')
+                    ->where('p.personneType=1')
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    public function getListePersonne()
+    {
+        $entityManager = $this->getEntityManager();
+
+        return $query = $entityManager->createQuery(
+            'SELECT p, t
+             FROM App\Entity\Personne p
+             INNER JOIN p.personneType t'
+        )->getArrayResult();
+    }
 }

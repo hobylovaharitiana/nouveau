@@ -27,16 +27,7 @@ class PersonneType
      */
     private $specialite;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $idPersonne;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Personne::class, inversedBy="personneType")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $personne;
 
     public function getId(): ?int
     {
@@ -67,27 +58,6 @@ class PersonneType
         return $this;
     }
 
-    public function getIdPersonne(): ?int
-    {
-        return $this->idPersonne;
-    }
 
-    public function setIdPersonne(int $idPersonne): self
-    {
-        $this->idPersonne = $idPersonne;
 
-        return $this;
-    }
-
-    public function getPersonne(): ?Personne
-    {
-        return $this->personne;
-    }
-
-    public function setPersonne(?Personne $personne): self
-    {
-        $this->personne = $personne;
-
-        return $this;
-    }
 }
