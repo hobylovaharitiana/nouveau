@@ -78,7 +78,7 @@ class PersonneController extends AbstractController
         return $this->redirectToRoute('read_personne');
     }
     /**
-     * @Route("/personne", name="Liste_personne")
+     * @Route("/personne", name="liste_personne")
      */
     public function listePersonne()
     {

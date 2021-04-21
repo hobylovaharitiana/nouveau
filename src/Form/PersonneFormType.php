@@ -20,7 +20,6 @@ class PersonneFormType extends AbstractType
             ->add('emailPersonne')
             ->add('telephone')
             ->add('adresse')
-
             ->add('personneType', EntityType::class, [
                 'class' => PersonneType::class,
                 'choice_label' => function ($personneType) {
