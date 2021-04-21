@@ -26,6 +26,7 @@ class PersonneController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($personne);
             $entityManager->flush();
+            return $this->redirectToRoute('read_personne');
         }
 
         return $this->render('personne/personne-form.html.twig', [
