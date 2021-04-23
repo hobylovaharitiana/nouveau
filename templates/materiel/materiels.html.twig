@@ -12,6 +12,7 @@
             <th>Nom</th>
             <th>Maque</th>
             <th>Caracteristiques</th>
+            <th>NomPersonne</th>
         </thead>
         {% for materiel in materiels %}
         <tbody>
@@ -19,6 +20,7 @@
             <td>{{ materiel.nomMateriel }}</td>
             <td>{{ materiel.marqueMateriel }}</td>
             <td>{{ materiel.caracteristique }}</td>
+            <th>{{ materiel.personnes.nomPersonne }}</th>
             <td><a href="{{ path('modify_materiel', {'id': materiel.id}) }}">Modifier</a></td>
             <td><a href="{{ path('delete_materiel', {'id': materiel.id}) }}">Supprimer</a></td>
         </tbody>

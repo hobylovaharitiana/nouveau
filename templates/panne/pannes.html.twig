@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PanneController!{% endblock %}
+
+{% block body %}
+    <h1>Lise des pannes</h1>
+    <p><a href="{{ path('add_panne') }}">Ajouter un panne</a></p>
+    <table>
+        <thead>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Materiel</th>
+        </thead>
+        {% for panne in pannes %}
+        <tbody>
+            <td>{{ panne.id}}</td>
+            <td>{{ panne.typePanne }}</td>
+            <td>{{ panne.materiel.nomMateriel }}</td>
+            <td><a href="{{ path('modify_panne', {'id': panne.id}) }}">Modifier</a></td>
+            <td><a href="{{ path('delete_panne', {'id': panne.id}) }}">Supprimer</a></td>
+        </tbody>
+        {% endfor %}
+    </table>
+{% endblock %}

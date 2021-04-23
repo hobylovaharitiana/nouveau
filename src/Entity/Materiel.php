@@ -32,6 +32,12 @@ class Materiel
      */
     private $caracteristique;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Personne::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $personnes;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +75,18 @@ class Materiel
     public function setCaracteristique(?string $caracteristique): self
     {
         $this->caracteristique = $caracteristique;
+
+        return $this;
+    }
+
+    public function getPersonnes(): ?Personne
+    {
+        return $this->personnes;
+    }
+
+    public function setPersonnes(?Personne $personnes): self
+    {
+        $this->personnes = $personnes;
 
         return $this;
     }

@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Materiel;
+use App\Entity\Personne;
+use App\Entity\ProblemeMateriel;
 use App\Form\MaterielFormType;
+use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\DocBlock\Description;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,35 +18,48 @@ class MaterielController extends AbstractController
     /**
      * @Route("/add-materiel", name="add_materiel")
      */
-    public function addMateriel(Request $request): Response
+    public function addMateriel(Request $request, EntityManagerInterface  $entityManager): Response
     {
         $materiel = new Materiel();
         $form = $this->createForm(MaterielFormType::class, $materiel);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $entityManager = $this->getDoctrine()->getManager();
+        $personnes = $entityManager->getRepository(Personne::class)->findUtilisateur();
+       // dd($personnes);
+        $personne = $request->request->get('personne');
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            //maka objet(fitambaran momban personne)     #variable
+            $person = $entityManager->getRepository(Personne::class)->find((int)$personne);
+            //dd($person);
+            $materiel->setPersonnes($person);
             $entityManager->persist($materiel);
             $entityManager->flush();
-            return $this->redirectToRoute('read_materiel');
 
+            return $this->redirectToRoute('read_materiel');
         }
         return $this->render('materiel/materiel-form.html.twig', [
            "form_title" => "Ajouter un materiel",
-           "form_materiel" => $form->createView(),
+           "form" => $form->createView(),
+
+            "personnes" => $personnes,
         ]);
+
     }
     /**
      * @Route("/read-materiel", name="read_materiel")
      */
     public function readMateriel()
     {
-        $materiels = $this->getDoctrine()->getRepository(Materiel::class)->findAll();
+       // $materiels = $this->getDoctrine()->getRepository(Materiel::class)->findAll();
 
-        return $this->render('materiel/materiels.html.twig', [
-            "materiels" => $materiels,
-        ]);
+        //return $this->render('materiel/materiels.html.twig', [
+          //  "materiels" => $materiels,
+
+        //]);
+        $idMax = $this->getDoctrine()->getRepository(Personne::class)->getLastPanne();
+        dd($idMax);
+        $personne = $this->getDoctrine()->getRepository(Personne::class)->findOneBy($idMax);
     }
     /**
      * @Route("/materiel/{id}", name="materiel")
@@ -89,4 +105,5 @@ class MaterielController extends AbstractController
 
         return $this->redirectToRoute("read_materiel");
     }
-}
+    }
+

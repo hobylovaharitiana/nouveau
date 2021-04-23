@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PersonneController!{% endblock %}
+
+{% block body %}
+    <h1>Lise des problems</h1>
+    <table>
+        <thead>
+        <th>materiel</th>
+        <th>panne</th>
+        <th>NombrePanne</th>
+        </thead>
+        {% for probleme in problemes %}
+            <tbody>
+            <td>{{ probleme.materiel.nomMateriel }}</td>
+            <td>{{ probleme.panne.typePanne }}</td>
+            <td>{{ probleme.}}</td>
+            </tbody>
+        {% endfor %}
+    </table>
+{% endblock %}

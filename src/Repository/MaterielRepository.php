@@ -47,4 +47,13 @@ class MaterielRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getListeMateriel()
+    {
+        $entityManager = $this->getEntityManager();
+        return $query = $entityManager->createQuery(
+            'SELECT m, p
+            FROM App\Entity\Materiel m
+            INNER JOIN m.personne p'
+        )->getArrayResult();
+    }
 }

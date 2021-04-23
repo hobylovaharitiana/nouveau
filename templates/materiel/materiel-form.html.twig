@@ -1,6 +1,17 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <h1>{{ form_title}} </h1>
-    {{ form(form_materiel) }}
+    {{ form_start(form) }}
+    <h1>{{ form_title }}</h1>
+    {{ form_widget(form.nomMateriel, {'attr' : {'class' : 'form_control is invalid', 'style': 'color:red', 'placeholder' : 'nom_materiel', 'autocomplete' : 'off'}}) }}
+    {{ form_widget(form.marqueMateriel, {'attr' : {'class' : 'form_control is invalid', 'style': 'color:red', 'placeholder' : 'marque_materiel', 'autocomplete' : 'off'}}) }}
+    {{ form_widget(form.caracteristique, {'attr' : {'class' : 'form_control is invalid', 'style': 'color:red', 'placeholder' : 'caracteristique', 'autocomplete' : 'off'}}) }}
+
+    <select name="personne">
+        {% for personne in personnes %}
+            <option value="{{ personne.id }}">{{ personne.nomPersonne }}</option>
+        {% endfor %}
+    </select>
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
 {% endblock %}
