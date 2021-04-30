@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Materiel;
 use App\Entity\Panne;
+use App\Entity\Personne;
 use App\Entity\ProblemeMateriel;
 use App\Form\PanneFormType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,18 +18,27 @@ class PanneController extends AbstractController
     /**
      * @Route("/add-panne", name="add_panne")
      */
-    public function addPanne(Request $request): Response
+    public function addPanne(Request $request, EntityManagerInterface $entityManager ): Response
     {
         $panne = new Panne();
         $problemeMateriel = new ProblemeMateriel();
         $form = $this->createForm(PanneFormType::class, $panne);
         $form->handleRequest($request);
 
+        $personnes = $entityManager->getRepository(Personne::class)->findTechnicien();
+        //dd($personnes);
+        $personne = $request->request->get('personnes');
+
         if ($form->isSubmitted() && $form->isValid())
         {
-             $entityManager = $this->getDoctrine()->getManager();
+             $person = $entityManager->getRepository(Personne::class)->find((int)$personne);
+             $panne->setPersonnes($person);
              $entityManager->persist($panne);
+            // $entityManager = $this->getDoctrine()->getManager();
+             //$entityManager->persist($panne);
              $entityManager->flush();
+
+             return $this->redirectToRoute('liste_panne');
 
             //maka idpanne napidirina farany
             $idPanne = $this->getDoctrine()->getRepository(Panne::class)->makaIdPanne();
@@ -50,7 +61,8 @@ class PanneController extends AbstractController
         }
         return $this->render('panne/panne-form.html.twig', [
             "form_title" => "Ajouter un panne",
-            "form_panne" => $form->createView(),
+            "form" => $form->createView(),
+            'personnes' => $personnes,
         ]);
     }
     /**

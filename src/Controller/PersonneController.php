@@ -71,8 +71,10 @@ class PersonneController extends AbstractController
      */
     public function deletePersonne(int $id): Response
     {
+
         $entityManager = $this->getDoctrine()->getManager();
         $personne = $entityManager->getRepository(Personne::class)->find($id);
+       // dd($personne);
         $entityManager->remove($personne);
         $entityManager->flush();
 

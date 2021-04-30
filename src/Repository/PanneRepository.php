@@ -58,9 +58,10 @@ class PanneRepository extends ServiceEntityRepository
         $entityManager =  $this->getEntityManager();
 
         return $query = $entityManager->createQuery(
-            'SELECT p, m
+            'SELECT p, m, prs
             FROM App\Entity\Panne p
-            INNER JOIN p.materiel m'
+            INNER JOIN p.materiel m
+            INNER JOIN p.personnes prs '
         )->getArrayResult();
     }
 

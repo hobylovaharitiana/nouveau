@@ -70,4 +70,12 @@ class PersonneRepository extends ServiceEntityRepository
             INNER JOIN p.personneType t'
         )->getArrayResult();
     }
+
+    public function findTechnicien()
+    {
+        return $this->createQueryBuilder('p')
+                    ->where('p.personneType=2')
+                    ->getQuery()
+                    ->getResult();
+    }
 }

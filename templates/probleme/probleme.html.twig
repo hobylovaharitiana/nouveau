@@ -7,14 +7,12 @@
     <table>
         <thead>
         <th>materiel</th>
-        <th>panne</th>
         <th>NombrePanne</th>
         </thead>
-        {% for probleme in problemes %}
+        {% for compte in 0..comptes %}
             <tbody>
-            <td>{{ probleme.materiel.nomMateriel }}</td>
-            <td>{{ probleme.panne.typePanne }}</td>
-            <td>{{ probleme.}}</td>
+            <td>{{ nomMateriel[compte] }}</td>
+            <td>{{ nombrepanne[compte] }}</td>
             </tbody>
         {% endfor %}
     </table>

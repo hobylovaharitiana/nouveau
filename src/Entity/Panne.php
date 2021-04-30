@@ -28,6 +28,12 @@ class Panne
      */
     private $materiel;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Personne::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $personnes;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +59,18 @@ class Panne
     public function setMateriel(?Materiel $materiel): self
     {
         $this->materiel = $materiel;
+
+        return $this;
+    }
+
+    public function getPersonnes(): ?Personne
+    {
+        return $this->personnes;
+    }
+
+    public function setPersonnes(?Personne $personnes): self
+    {
+        $this->personnes = $personnes;
 
         return $this;
     }

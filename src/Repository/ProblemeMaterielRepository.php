@@ -51,7 +51,7 @@ class ProblemeMaterielRepository extends ServiceEntityRepository
     {
         $entityManager = $this->getEntityManager();
         return $query = $entityManager->createQuery(
-            'SELECT m, p, pm, COUNT(m.id) as id
+            'SELECT m, p, pm, COUNT(m.id) as nombrePanne
             FROM App\Entity\ProblemeMateriel pm
             INNER JOIN pm.materiel m
             INNER JOIN pm.panne p

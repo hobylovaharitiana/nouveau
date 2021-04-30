@@ -32,8 +32,8 @@ class SecurityController extends AbstractController
             $manager->flush();
 
             return $this->redirectToRoute('security_login');
-        }
 
+        }
         return $this->render('security/registration.html.twig', ['form' => $form->createView()
         ]);
     }
@@ -43,7 +43,6 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils){
         $error = $authenticationUtils->getLastAuthenticationError();
         return $this->render('security/login.html.twig', [ 'error' => $error]);
-
     }
     /**
     * @Route("/deconnexion", name="security_logout")

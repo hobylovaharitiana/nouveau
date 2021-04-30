@@ -10,12 +10,14 @@
         <th>ID</th>
         <th>Type</th>
         <th>Materiel</th>
+        <th>Nom</th>
         </thead>
         {% for panne in pannes %}
         <tbody>
             <td>{{ panne.id}}</td>
             <td>{{ panne.typePanne }}</td>
             <td>{{ panne.materiel.nomMateriel }}</td>
+            <td>{{ panne.personnes.nomPersonne }}</td>
             <td><a href="{{ path('modify_panne', {'id': panne.id}) }}">Modifier</a></td>
             <td><a href="{{ path('delete_panne', {'id': panne.id}) }}">Supprimer</a></td>
         </tbody>
