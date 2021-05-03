@@ -38,9 +38,15 @@ class MaterielController extends AbstractController
 
             return $this->redirectToRoute('read_materiel');
         }
-        return $this->render('materiel/materiel-form.html.twig', [
+        /*return $this->render('materiel/materiel-form.html.twig', [
            "form_title" => "Ajouter un materiel",
            "form" => $form->createView(),
+
+            "personnes" => $personnes,
+        ]);*/
+        return $this->render("materiel/modal.html.twig", [
+            "form_title" => "Ajouter un materiel",
+            "form" => $form->createView(),
 
             "personnes" => $personnes,
         ]);
@@ -51,14 +57,15 @@ class MaterielController extends AbstractController
      */
     public function readMateriel()
     {
-       // $materiels = $this->getDoctrine()->getRepository(Materiel::class)->findAll();
+       $materiels = $this->getDoctrine()->getRepository(Materiel::class)->findAll();
 
-        //return $this->render('materiel/materiels.html.twig', [
-          //  "materiels" => $materiels,
+        return $this->render('materiel/materiels.html.twig', [
+           "materiels" => $materiels,
 
-        //]);
+        ]);
+
         $idMax = $this->getDoctrine()->getRepository(Personne::class)->getLastPanne();
-        dd($idMax);
+        //dd($idMax);
         $personne = $this->getDoctrine()->getRepository(Personne::class)->findOneBy($idMax);
     }
     /**
@@ -67,6 +74,7 @@ class MaterielController extends AbstractController
     public function materiel(int $id): Response
     {
         $materiel = $this->getDoctrine()->getRepository(Materiel::class)->find($id);
+
 
         return $this->render("materiel/materiel.html.twig", [
             "materiel" => $materiel,
@@ -80,18 +88,43 @@ class MaterielController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $materiel = $entityManager->getRepository(Materiel::class)->find($id);
+        //dd($materiel->getPersonnes()->getId());
+
+        //dd($materiel->get);
+
+        $personnes = $entityManager->getRepository(Personne::class)->findUtilisateur();
+
+        $pers = $entityManager->getRepository(Personne::class)->find($materiel->getPersonnes()->getId());
+
+        //dd($pers);
+
         $form = $this->createForm(MaterielFormType::class, $materiel);
+        //stocker anat $request n zvtr nmodifiena rht
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid())
         {
+            //dd($request);
+            $idPersonne = $request->get('personne');
+            //dd($idPersonne);
+            $newPersonne = $entityManager->getRepository(Personne::class)->find($idPersonne);
+            //dd($newPersonne);
+            //set = mandefa
+            $materiel->setPersonnes($newPersonne);
+            //dd($materiel);
             $entityManager->flush();
             return $this->redirectToRoute('read_materiel');
+
         }
         return $this->render("materiel/materiel-form.html.twig", [
             "form_title" => "Modifier un materiel",
-            "form_materiel" => $form->createView(),
+            "form" => $form->createView(),
+            "personnes" => $personnes,
+            "pers" => $pers,
         ]);
+
+
     }
     /**
      * @Route("/delete-materiel/{id}", name="delete_materiel")

@@ -70,7 +70,9 @@ class PanneController extends AbstractController
      */
     public function readPanne()
     {
+
         $pannes = $this->getDoctrine()->getRepository(Panne::class)->findAll();
+        //dd($pannes);
 
         return $this->render('panne/pannes.html.twig', [
             "pannes" => $pannes,
@@ -95,16 +97,44 @@ class PanneController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $panne = $entityManager->getRepository(Panne::class)->find($id);
+        //dd($panne->getPersonnes()->getId());
+
+        $personnes = $entityManager->getRepository(Personne::class)->findTechnicien();
+        $pers = $entityManager->getRepository(Personne::class)->find($panne->getPersonnes()->getId());
+       // dd($pers);
+
+        $materiels = $entityManager->getRepository(Materiel::class)->findMateriel();
+        $mat = $entityManager->getRepository(Materiel::class)->find($panne->getMateriel()->getId());
+        //dd($mat);
+
         $form = $this->createForm(PanneFormType::class, $panne);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
+            //dd($request);
+           $idPersonne = $request->get('personne');
+           // dd($idPersonne);
+           $newPersonne = $entityManager->getRepository(Personne::class)->find($idPersonne);
+          // dd($newPersonne);
+           $panne->setPersonnes($newPersonne);
+            //dd($panne);
+
+            $idMateriel = $request->get('materiel');
+            //dd($idMateriel);
+            $newMateriel = $entityManager->getRepository(Materiel::class)->find($idMateriel);
+            //dd($newMateriel);
+            $panne->setMateriel($newMateriel);
             $entityManager->flush();
+            return $this->redirectToRoute('read_panne');
         }
         return $this->render("panne/panne-form.html.twig", [
             "form_title" => "Modifier un panne",
-            "form_panne" => $form->createView(),
+            "form" => $form->createView(),
+            "personnes" => $personnes,
+            "pers" => $pers,
+            "mat" => $mat,
+            "materiels" => $materiels,
         ]);
     }
     /**

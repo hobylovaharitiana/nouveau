@@ -56,4 +56,10 @@ class MaterielRepository extends ServiceEntityRepository
             INNER JOIN m.personne p'
         )->getArrayResult();
     }
+    public function findMateriel()
+    {
+        return $this->createQueryBuilder('m')
+            ->getQuery()
+            ->getResult();
+    }
 }

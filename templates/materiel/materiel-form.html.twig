@@ -8,6 +8,7 @@
     {{ form_widget(form.caracteristique, {'attr' : {'class' : 'form_control is invalid', 'style': 'color:red', 'placeholder' : 'caracteristique', 'autocomplete' : 'off'}}) }}
 
     <select name="personne">
+        <option value="{{ pers.id }}">{{ pers.nomPersonne }}</option>
         {% for personne in personnes %}
             <option value="{{ personne.id }}">{{ personne.nomPersonne }}</option>
         {% endfor %}

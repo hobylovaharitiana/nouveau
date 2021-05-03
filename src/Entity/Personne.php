@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PersonneRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PersonneRepository::class)
@@ -29,11 +30,13 @@ class Personne
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Email()
      */
     private $emailPersonne;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Length(min="10",max="10",minMessage="Votre numero doit comporter 10 caracteres", maxMessage="Votre numero doit comporter 10 caracteres")
      */
     private $telephone;
 
@@ -47,6 +50,7 @@ class Personne
      * @ORM\JoinColumn(nullable=false)
      */
     private $personneType;
+   
 
     public function getId(): ?int
     {

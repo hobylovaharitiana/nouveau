@@ -16,12 +16,6 @@ class PanneFormType extends AbstractType
     {
         $builder
             ->add('typePanne')
-            ->add('materiel', EntityType::class, [
-                'class' => Materiel::class,
-                'choice_label' => function ($materiel) {
-                return $materiel->getNomMateriel();
-                }
-            ])
             ->add('submit', SubmitType::class)
         ;
     }
