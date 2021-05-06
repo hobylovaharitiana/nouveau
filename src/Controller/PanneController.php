@@ -32,13 +32,14 @@ class PanneController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
              $person = $entityManager->getRepository(Personne::class)->find((int)$personne);
+             dd($person);
              $panne->setPersonnes($person);
              $entityManager->persist($panne);
             // $entityManager = $this->getDoctrine()->getManager();
              //$entityManager->persist($panne);
              $entityManager->flush();
 
-             return $this->redirectToRoute('liste_panne');
+
 
             //maka idpanne napidirina farany
             $idPanne = $this->getDoctrine()->getRepository(Panne::class)->makaIdPanne();
@@ -59,7 +60,13 @@ class PanneController extends AbstractController
 
             return $this->redirectToRoute('read_panne');
         }
-        return $this->render('panne/panne-form.html.twig', [
+        /*return $this->render('panne/panne-form.html.twig', [
+            "form_title" => "Ajouter un panne",
+            "form" => $form->createView(),
+            'personnes' => $personnes,
+        ]);*/
+
+        return $this->render('panne/modal.html.twig', [
             "form_title" => "Ajouter un panne",
             "form" => $form->createView(),
             'personnes' => $personnes,
@@ -68,14 +75,67 @@ class PanneController extends AbstractController
     /**
      * @Route("/read-panne", name="read_panne")
      */
-    public function readPanne()
+    public function readPanne(Request $request, EntityManagerInterface $entityManager)
     {
+        $panne = new Panne();
+        $problemeMateriel = new ProblemeMateriel();
+
+
+        $personnes = $entityManager->getRepository(Personne::class)->findTechnicien();
+        //dd($personnes);
+        $personne = $request->request->get('personne');
+        //dd($personne);
+
+        $materiels = $entityManager->getRepository(Materiel::class)->findMateriel();
+        //dd($materiels);
+        $materiel = $request->request->get('materiel');
 
         $pannes = $this->getDoctrine()->getRepository(Panne::class)->findAll();
         //dd($pannes);
+        $form = $this->createForm(PanneFormType::class, $panne);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            //dd($request);
+            $person = $entityManager->getRepository(Personne::class)->find((int)$personne);
+            $panne->setPersonnes($person);
+            $entityManager->persist($panne);
+            // $entityManager = $this->getDoctrine()->getManager();
+            //$entityManager->persist($panne);
+
+            $mat = $entityManager->getRepository(Materiel::class)->find((int)$materiel);
+            $panne->setMateriel($mat);
+            $entityManager->persist($panne);
+            $entityManager->flush();
+
+
+
+            //maka idpanne napidirina farany
+            $idPanne = $this->getDoctrine()->getRepository(Panne::class)->makaIdPanne();
+            // dd($idPanne);
+
+            //maka panne ze manana anle id
+            $pannes = $this->getDoctrine()->getRepository(Panne::class)->find($idPanne);
+            //dd($pannes);
+            $idMateriel = $pannes->getMateriel()->getid();
+            //dd($idMateriel);
+            $materiel = $this->getDoctrine()->getRepository(Materiel::class)->find($pannes->getMateriel()->getid());
+            //dd($materiel);
+
+            $problemeMateriel->setMateriel($materiel);
+            $problemeMateriel->setPanne($pannes);
+            $entityManager->persist($problemeMateriel);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('read_panne');
+        }
 
         return $this->render('panne/pannes.html.twig', [
             "pannes" => $pannes,
+            "form_title" => "Ajouter un panne",
+            "form" => $form->createView(),
+            'personnes' => $personnes,
+            'materiels' => $materiels,
         ]);
     }
     /**

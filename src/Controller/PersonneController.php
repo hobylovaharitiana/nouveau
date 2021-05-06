@@ -11,7 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PersonneController extends AbstractController
+
 {
+
     /**
      * @Route("/add-personne", name="add_personne")
      */
@@ -29,7 +31,11 @@ class PersonneController extends AbstractController
             return $this->redirectToRoute('read_personne');
         }
 
-        return $this->render('personne/personne-form.html.twig', [
+       /* return $this->render('personne/personne-form.html.twig', [
+            "form_title" => "Ajouter un personne",
+            "form_product" => $form->createView(),
+        ]);*/
+        return $this->render('personne/modal.html.twig', [
             "form_title" => "Ajouter un personne",
             "form_product" => $form->createView(),
         ]);
@@ -37,12 +43,25 @@ class PersonneController extends AbstractController
     /**
      * @Route("/read-personne", name="read_personne")
      */
-    public function readPersonne()
+    public function readPersonne(Request $request)
     {
+        $personne = new Personne();
+        $form = $this->createForm(PersonneFormType::class, $personne);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($personne);
+            $entityManager->flush();
+            return $this->redirectToRoute('read_personne');
+        }
         $personnes = $this->getDoctrine()->getRepository(Personne::class)->findAll();
 
         return $this->render('personne/personnes.html.twig', [
             "personnes" => $personnes,
+            "form_title" => "Ajouter un personne",
+            "form_product" => $form->createView(),
         ]);
     }
     /**

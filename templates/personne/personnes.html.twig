@@ -1,3 +1,5 @@
+{% extends "base.html.twig" %}
+{% block body %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,8 +20,43 @@
     <link rel="stylesheet" href="fontawesome/font.css">
     <link rel="stylesheet" href="cssboot/icon.css">
     <link rel="stylesheet" href="cssboot/roboto.css">
+    <link rel="stylesheet" href="cssnv/w3.css">
 
 <body>
+
+
+<nav class="navbar navbar-expand-custom navbar-mainbg">
+    <a class="navbar-brand navbar-logo" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars text-white"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('read_panne') }}"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="javascript:void(0);"><i class="far fa-address-book"></i>Address Book</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0);"><i class="far fa-clone"></i>Components</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0);"><i class="far fa-calendar-alt"></i>Calendar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0);"><i class="far fa-chart-bar"></i>Charts</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0);"><i class="far fa-copy"></i>Documents</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+
 <div class="container">
     <div class="table-wrapper">
         <div class="table-title">
@@ -28,7 +65,7 @@
                     <h2>Personne</h2>
                 </div>
                 <div class="col-sm-6">
-                    <a href="{{ path('add_personne') }}" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Ajouter</span></a>
+                    <a onclick="document.getElementById('id01').style.display='block'" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Ajouter</span></a>
                 </div>
             </div>
         </div>
@@ -64,6 +101,7 @@
                 <td>
                     <a href="{{ path('modify_personne', {'id': personne.id}) }}" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                     <a href="{{ path('delete_personne', {'id': personne.id}) }}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                    <a onclick=" {{ path('modify_personne', {'id': personne.id}) }}" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Ajouter</span></a>
                 </td>
                 </tbody>
             {% endfor %}
@@ -174,5 +212,29 @@
         </div>
     </div>
 </div>
+
+
+<div class="w3-container">
+    <h2>W3.CSS Login Modal</h2>
+    <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-green w3-large">Login</button>
+
+    <div id="id01" class="w3-modal">
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+
+                <h1>{{ form_title }}</h1>
+                {{ form(form_product) }}
+
+
+            <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+                <button onclick="document.getElementById('id01').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
+                <button onclick="document.getElementById('id01').style.display='none'" type="submit" class="w3-button w3-blue">Ajouter</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
+{% endblock %}

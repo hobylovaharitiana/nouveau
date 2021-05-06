@@ -17,7 +17,9 @@
     <link rel="stylesheet" href="cssboot/style.css">
     <link rel="stylesheet" href="fontawesome/font.css">
     <link rel="stylesheet" href="cssboot/icon.css">
-    <link rel="stylesheet" href="cssboot/roboto.css">
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="cssnv/w3.css">
 
 <body>
 <div class="container">
@@ -28,7 +30,7 @@
                     <h2>Materiel</h2>
                 </div>
                 <div class="col-sm-6">
-                    <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-green w3-large">Ajouter</button>
+                    <a onclick="document.getElementById('id01').style.display='block'" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Ajouter</span></a>
                 </div>
             </div>
         </div>
@@ -61,81 +63,10 @@
 
         </table>
     </div>
-
-
-
-    <div class="w3-container">
-        <h2>W3.CSS Login Modal</h2>
-        <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-green w3-large">Login</button>
-
-        <div id="id01" class="w3-modal">
-            <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
-
-                {% block body %}
-                    {{ form_start(form) }}
-                    <h1>{{ form_title }}</h1>
-                    {{ form_widget(form.nomMateriel, {'attr' : {'class' : 'w3-input w3-border w3-margin-bottom', 'placeholder' : 'nom_materiel', 'autocomplete' : 'off'}}) }}
-                    {{ form_widget(form.marqueMateriel, {'attr' : {'class' : 'w3-input w3-border w3-margin-bottom', 'placeholder' : 'marque_materiel', 'autocomplete' : 'off'}}) }}
-                    {{ form_widget(form.caracteristique, {'attr' : {'class' : 'w3-input w3-border w3-margin-bottom', 'placeholder' : 'caracteristique', 'autocomplete' : 'off'}}) }}
-
-                    <select name="personne">
-                        {% for personne in personnes %}
-                            <option value="{{ personne.id }}">{{ personne.nomPersonne }}</option>
-                        {% endfor %}
-                    </select>
-
-                    {{ form_rest(form) }}
-                    {{ form_end(form) }}
-                {% endblock %}
-
-                <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
-                    <button onclick="document.getElementById('id01').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
-                    <button onclick="document.getElementById('id01').style.display='none'" type="submit" class="w3-button w3-blue">Ajouter</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-
-
-
 </div>
 <!-- Edit Modal HTML -->
-<div id="addEmployeeModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form>
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Employee</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Address</label>
-                        <textarea class="form-control" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <input type="text" class="form-control" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                    <input type="submit" class="btn btn-success" value="Add">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
+
 <!-- Edit Modal HTML -->
 <div id="editEmployeeModal" class="modal fade">
     <div class="modal-dialog">
@@ -192,5 +123,39 @@
         </div>
     </div>
 </div>
+
+
+<div class="w3-container">
+
+
+    <div id="id01" class="w3-modal">
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+            {% block body %}
+                {{ form_start(form) }}
+                <h1>{{ form_title }}</h1>
+                {{ form_widget(form.nomMateriel, {'attr' : {'class' : 'w3-input w3-border w3-margin-bottom', 'placeholder' : 'nom_materiel', 'autocomplete' : 'off'}}) }}
+                {{ form_widget(form.marqueMateriel, {'attr' : {'class' : 'w3-input w3-border w3-margin-bottom', 'placeholder' : 'marque_materiel', 'autocomplete' : 'off'}}) }}
+                {{ form_widget(form.caracteristique, {'attr' : {'class' : 'w3-input w3-border w3-margin-bottom', 'placeholder' : 'caracteristique', 'autocomplete' : 'off'}}) }}
+
+                <select name="personne">
+                    {% for personne in personnes %}
+                        <option value="{{ personne.id }}">{{ personne.nomPersonne }}</option>
+                    {% endfor %}
+                </select>
+
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            {% endblock %}
+
+            <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+                <button onclick="document.getElementById('id01').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
+                <button onclick="document.getElementById('id01').style.display='none'" type="submit" class="w3-button w3-blue">Ajouter</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

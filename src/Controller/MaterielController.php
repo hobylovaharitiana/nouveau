@@ -55,13 +55,39 @@ class MaterielController extends AbstractController
     /**
      * @Route("/read-materiel", name="read_materiel")
      */
-    public function readMateriel()
+    public function readMateriel( EntityManagerInterface  $entityManager, Request $request)
     {
        $materiels = $this->getDoctrine()->getRepository(Materiel::class)->findAll();
 
+
+
+        $materiel = new Materiel();
+        $form = $this->createForm(MaterielFormType::class, $materiel);
+        $form->handleRequest($request);
+
+        $personnes = $entityManager->getRepository(Personne::class)->findUtilisateur();
+        // dd($personnes);
+        $personne = $request->request->get('personne');
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            //maka objet(fitambaran momban personne)     #variable
+            $person = $entityManager->getRepository(Personne::class)->find((int)$personne);
+            //dd($person);
+            $materiel->setPersonnes($person);
+            $entityManager->persist($materiel);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('read_materiel');
+        }
+
+
+
+
         return $this->render('materiel/materiels.html.twig', [
            "materiels" => $materiels,
-
+            "form_title" => "Ajouter un materiel",
+            "form" => $form->createView(),
+            "personnes" => $personnes,
         ]);
 
         $idMax = $this->getDoctrine()->getRepository(Personne::class)->getLastPanne();
