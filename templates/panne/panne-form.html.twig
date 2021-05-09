@@ -1,0 +1,24 @@
+
+{% extends "base.html.twig" %}
+
+{% block body %}
+    {{ form_start(form) }}
+    <h1>{{ form_title }}</h1>
+{{ form_widget(form.typePanne, {'attr' : {'class' : 'form_control is invalid', 'style': 'color:red', 'placeholder' : 'typePanne', 'autocomplete' : 'off'}}) }}
+    <select name="personne">
+        <option value="{{ pers.id }}">{{ pers.nomPersonne }}</option>
+        {% for personne in personnes %}
+            <option value="{{ personne.id }}">{{ personne.nomPersonne }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="materiel">
+        <option value="{{ mat.id }}">{{ mat.nomMateriel }}</option>
+        {% for materiel in materiels %}
+            <option value="{{ materiel.id }}">{{ materiel.nomMateriel }}</option>
+        {% endfor %}
+    </select>
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock %}

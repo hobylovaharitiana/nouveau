@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PersonneTypeController!{% endblock %}
+
+
+{% block body %}
+    <h1>Lise des types de personnes</h1>
+    <p><a href="{{ path('add_personneType') }}">Ajouter un type de personne</a></p>
+    <table>
+        <thead>
+        <th>ID</th>
+        <th>nomType</th>
+        <th>specialité</th>
+        <th>idpersonne</th>
+        </thead>
+        {% for personneType in personneTypes %}
+            <tbody>
+            <td>{{ personneType.id }}</td>
+            <td>{{ personneType.nomType }}</td>
+            <td>{{ personneType.specialite }}</td>
+            <td><a href="{{ path('modify_personneType', {'id': personneType.id}) }}">Modifier</a></td>
+            <td><a href="{{ path('delete_personneType', {'id': personneType.id}) }}">Supprimer</a></td>
+            </tbody>
+        {% endfor %}
+    </table>
+{% endblock %}
