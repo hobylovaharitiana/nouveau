@@ -62,4 +62,20 @@ class MaterielRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function searchByName($keyword){
+        $query = $this->createQueryBuilder('m')
+            ->where('m.nomMateriel LIKE :key')->orWhere('m.marqueMateriel LIKE :key')
+            ->setParameter('key', '%'.$keyword.'%')->getQuery();
+
+        return $query->getResult();
+
+    }
+
+    public function findMerielByPersonne($id) {
+        $query = $this->createQueryBuilder('m')
+            ->where('m.personnes = :key')
+            ->setParameter('key', $id)->getQuery();
+
+        return $query->getResult();
+    }
 }

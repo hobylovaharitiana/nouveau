@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints\Json;
 class ProblemeController extends AbstractController
 {
     /**
-     * @Route("/probleme", name="liste_probleme")
+     * @Route("/probleme", name="read_probleme")
      */
     public function listeProbleme()
     {

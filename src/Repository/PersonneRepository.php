@@ -79,4 +79,13 @@ class PersonneRepository extends ServiceEntityRepository
                     ->getResult();
     }
 
+    public function searchByName($keyword){
+        $query = $this->createQueryBuilder('p')
+            ->where('p.nomPersonne LIKE :key')->orWhere('p.emailPersonne LIKE :key')
+            ->setParameter('key', '%'.$keyword.'%')->getQuery();
+
+        return $query->getResult();
+
+    }
+
 }

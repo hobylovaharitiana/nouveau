@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Materiel;
 use App\Entity\Personne;
+use App\Entity\PersonneType;
 use App\Form\PersonneFormType;
+use Knp\Component\Pager\PaginatorInterface;
 use PhpParser\Node\Stmt\Return_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,8 +46,11 @@ class PersonneController extends AbstractController
     /**
      * @Route("/read-personne", name="read_personne")
      */
-    public function readPersonne(Request $request)
+    public function readPersonne(Request $request, PaginatorInterface $paginator)
     {
+        $pa = $request->request->get('search');
+       
+        //dd($pa);
         $personne = new Personne();
         $form = $this->createForm(PersonneFormType::class, $personne);
         $form->handleRequest($request);
@@ -56,12 +62,25 @@ class PersonneController extends AbstractController
             $entityManager->flush();
             return $this->redirectToRoute('read_personne');
         }
-        $personnes = $this->getDoctrine()->getRepository(Personne::class)->findAll();
+        $listPt = $this->getDoctrine()->getRepository(PersonneType::class)->findAll();
+        if ($pa == '') {
+            $pers = $this->getDoctrine()->getRepository(Personne::class)->findAll();
+        }
+        else {            
+            $pers = $this->getDoctrine()->getRepository(Personne::class)->searchByName($pa);
+        }
+        
 
+        $personnes = $paginator->paginate(
+            $pers,
+            $request->query->getInt('page', 1),5
+        );
         return $this->render('personne/personnes.html.twig', [
+            "listPt" => $listPt,
             "personnes" => $personnes,
             "form_title" => "Ajouter un personne",
             "form_product" => $form->createView(),
+
         ]);
     }
     /**
@@ -85,6 +104,32 @@ class PersonneController extends AbstractController
             "form_product" => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/edit-personne", name="edit_personne")
+     */
+    public function editPersonne(Request $request) {
+        //if($request->isMethod('POST')) {
+        $nomPersonne = $request->request->get('nomPersonne');
+        $prenomPersonne = $request->request->get('prenomPersonne');
+        $emailPersonne = $request->request->get('emailPersonne');
+        $telephone = $request->request->get('telephone');
+        $adresse = $request->request->get('adresse');
+        $typePersonne = $request->request->get('typePersonne');
+        $personne = $this->getDoctrine()->getRepository(Personne::class)->find((int)$request->request->get('idPersonne'));
+        $personne->setNomPersonne($nomPersonne);
+        $personne->setPrenomPersonne($prenomPersonne);
+        $personne->setEmailPersonne($emailPersonne);
+        $personne->setTelephone($telephone);
+        $personne->setAdresse($adresse);
+        $typePers = $this->getDoctrine()->getRepository(PersonneType::class)->find((int)$request->request->get('typePersonne'));
+        $personne->setPersonneType($typePers);
+        $this->getDoctrine()->getManager()->flush();
+        return $this->redirectToRoute('read_personne');
+
+        // }
+    }
+
     /**
      * @Route("/delete-personne/{id}", name="delete_personne")
      */
@@ -94,10 +139,18 @@ class PersonneController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $personne = $entityManager->getRepository(Personne::class)->find($id);
        // dd($personne);
-        $entityManager->remove($personne);
-        $entityManager->flush();
+        $materiel = $entityManager->getRepository(Materiel::class)->findMerielByPersonne($id);
+        //dd($materiel);
 
-        return $this->redirectToRoute('read_personne');
+        if ($materiel == null) {
+            $entityManager->remove($personne);
+            $entityManager->flush();
+            return $this->redirectToRoute('read_personne');
+        }
+        else {
+            return $this->redirectToRoute('read_personne');
+        }
+
     }
     /**
      * @Route("/personne", name="liste_personne")

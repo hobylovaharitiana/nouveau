@@ -64,5 +64,12 @@ class PanneRepository extends ServiceEntityRepository
             INNER JOIN p.personnes prs '
         )->getArrayResult();
     }
+    public function searchByName($keyword){
+        $query = $this->createQueryBuilder('p')
+            ->where('p.typePanne LIKE :key')
+            ->setParameter('key', '%'.$keyword.'%')->getQuery();
 
+        return $query->getResult();
+
+    }
 }

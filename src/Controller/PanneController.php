@@ -8,6 +8,7 @@ use App\Entity\Personne;
 use App\Entity\ProblemeMateriel;
 use App\Form\PanneFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +33,7 @@ class PanneController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
              $person = $entityManager->getRepository(Personne::class)->find((int)$personne);
-             dd($person);
+             //dd($person);
              $panne->setPersonnes($person);
              $entityManager->persist($panne);
             // $entityManager = $this->getDoctrine()->getManager();
@@ -75,8 +76,10 @@ class PanneController extends AbstractController
     /**
      * @Route("/read-panne", name="read_panne")
      */
-    public function readPanne(Request $request, EntityManagerInterface $entityManager)
+    public function readPanne(Request $request, EntityManagerInterface $entityManager, PaginatorInterface $paginator)
     {
+        $pa = $request->get('search');
+        //dd($pa);
         $panne = new Panne();
         $problemeMateriel = new ProblemeMateriel();
 
@@ -129,14 +132,31 @@ class PanneController extends AbstractController
 
             return $this->redirectToRoute('read_panne');
         }
+        $list = $this->getDoctrine()->getRepository(Materiel::class)->findAll();
+        $listPt = $this->getDoctrine()->getRepository(Personne::class)->findAll();
+
+
+        if ($pa == ''){
+            $pans = $this->getDoctrine()->getRepository(Panne::class)->findAll();
+        }
+        else{
+            $pans = $this->getDoctrine()->getRepository(Panne::class)->searchByName($pa);
+
+        }
+        $pannes = $paginator->paginate(
+            $pans,
+            $request->query->getInt('page', 1),5
+        );
 
         return $this->render('panne/pannes.html.twig', [
+            "listPt" => $listPt,
+            "list" => $list,
             "pannes" => $pannes,
             "form_title" => "Ajouter un panne",
             "form" => $form->createView(),
             'personnes' => $personnes,
             'materiels' => $materiels,
-        ]);
+            ]);
     }
     /**
      * @Route("/panne/{id}", name="panne")
@@ -196,6 +216,26 @@ class PanneController extends AbstractController
             "mat" => $mat,
             "materiels" => $materiels,
         ]);
+    }
+
+    /**
+     * @Route("/edit-personne", name="edit_panne")
+     */
+    public function editPanne(Request $request) {
+        //if($request->isMethod('POST')) {
+        $typePanne = $request->request->get('typePanne');
+        $materiel = $request->request->get('materiel');
+        $personne = $request->request->get('personne');
+        $panne = $this->getDoctrine()->getRepository(Panne::class)->find((int)$request->request->get('idPanne'));
+        $panne->setTypePanne($typePanne);
+        $materiel = $this->getDoctrine()->getRepository(Materiel::class)->find((int)$request->request->get('materiel'));
+        $personne = $this->getDoctrine()->getRepository(Personne::class)->find((int)$request->request->get('personne'));
+        $panne->setMateriel($materiel);
+        $panne->setPersonnes($personne);
+        $this->getDoctrine()->getManager()->flush();
+        return $this->redirectToRoute('read_panne');
+
+        // }
     }
     /**
      * @Route("/delete-panne/{id}", name="delete_panne")

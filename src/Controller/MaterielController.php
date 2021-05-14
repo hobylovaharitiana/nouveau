@@ -7,6 +7,7 @@ use App\Entity\Personne;
 use App\Entity\ProblemeMateriel;
 use App\Form\MaterielFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use phpDocumentor\Reflection\DocBlock\Description;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,11 +56,11 @@ class MaterielController extends AbstractController
     /**
      * @Route("/read-materiel", name="read_materiel")
      */
-    public function readMateriel( EntityManagerInterface  $entityManager, Request $request)
+    public function readMateriel( EntityManagerInterface  $entityManager, Request $request, PaginatorInterface $paginator)
     {
-       $materiels = $this->getDoctrine()->getRepository(Materiel::class)->findAll();
 
-
+        $pa = $request->request->get('search');
+       // dd($pa);
 
         $materiel = new Materiel();
         $form = $this->createForm(MaterielFormType::class, $materiel);
@@ -79,11 +80,23 @@ class MaterielController extends AbstractController
 
             return $this->redirectToRoute('read_materiel');
         }
+        $listPt = $this->getDoctrine()->getRepository(Personne::class)->findTechnicien();
+        if ($pa == ''){
+            $mat = $this->getDoctrine()->getRepository(Materiel::class)->findAll();
+        }
+        else{
+            $mat = $this->getDoctrine()->getRepository(Materiel::class)->searchByName($pa);
+        }
 
+        $materiels = $paginator->paginate(
+            $mat,
+            $request->query->getInt('page', 1),5
+        );
 
 
 
         return $this->render('materiel/materiels.html.twig', [
+           "listPt" => $listPt,
            "materiels" => $materiels,
             "form_title" => "Ajouter un materiel",
             "form" => $form->createView(),
@@ -152,6 +165,27 @@ class MaterielController extends AbstractController
 
 
     }
+    /**
+     *@Route("/edit-materiel", name="edit_materiel")
+     */
+    public function editMateriel(Request $request){
+        $nomMateriel = $request->request->get('nomMateriel');
+        $marqueMateriel = $request->request->get('marqueMateriel');
+        $caracteristique = $request->request->get('caracteristique');
+        $personne = $request->request->get('personne');
+        $materiel = $this->getDoctrine()->getRepository(Materiel::class)->find((int)$request->request->get('idMateriel'));
+        $materiel->setNomMateriel($nomMateriel);
+        $materiel->setMarqueMateriel($marqueMateriel);
+        $materiel->setCaracteristique($caracteristique);
+        $personne = $this->getDoctrine()->getRepository(Personne::class)->find((int)$request->request->get('personne'));
+        $materiel->setPersonnes($personne);
+        $this->getDoctrine()->getManager()->flush();
+        return $this->redirectToRoute('read_materiel');
+
+
+    }
+
+
     /**
      * @Route("/delete-materiel/{id}", name="delete_materiel")
      */

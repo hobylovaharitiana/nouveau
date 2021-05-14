@@ -20,18 +20,24 @@
 
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="cssnv/w3.css">
+    <link rel="stylesheet" href="style.css">
 
 <body>
 <div class="container">
     <div class="table-wrapper">
+        <div class="col-sm-6">
+            <a onclick="document.getElementById('id01').style.display='block'" class="btn btn-success" data-toggle="modal"> <span>Ajouter</span></a>
+        </div>
         <div class="table-title">
             <div class="row">
                 <div class="col-sm-6">
-                    <h2>Materiel</h2>
-                </div>
-                <div class="col-sm-6">
-                    <a onclick="document.getElementById('id01').style.display='block'" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Ajouter</span></a>
-                </div>
+                    <div class="search-container">
+                        <form action="{{ path('read_materiel') }}" method="post">
+                            <input type="text" placeholder="Search.." name="search">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                    </div>
             </div>
         </div>
         <table class="table table-striped table-hover">
@@ -55,13 +61,72 @@
                 <td>{{ materiel.caracteristique }}</td>
                 <th>{{ materiel.personnes.nomPersonne }}</th>
                 <td>
-                    <a href="{{ path('modify_materiel', {'id': materiel.id}) }}" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+
+                    {# <a href="{{ path('modify_personne', {'id': personne.id}) }}" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> #}
+                    <a href="#editMateriel{{ materiel.id }}" class="edit" data-toggle="modal">
+                        <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+                    </a>
+                    <!-- Edit Modal HTML -->
+
+
+                    <div id="editMateriel{{ materiel.id }}" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form method="post" action="{{ path('edit_materiel') }}">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Edit Employee</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="hidden" name="idMateriel" value="{{ materiel.id }}">
+                                        <div class="form-group">
+                                            <label>Materiel</label>
+                                            <input type="text" id="nomMateriel{{ materiel.id }}" name="nomMateriel" value="{{ materiel.nomMateriel }}" class="form-control" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Marque</label>
+                                            <input type="text" id="marqueMateriel{{ materiel.id }}" name="marqueMateriel" value="{{ materiel.marqueMateriel }}" class="form-control" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Caracteristiques</label>
+                                            <input type="text" id="caracteristique{{ materiel.id }}" name="caracteristique" value="{{ materiel.caracteristique }}" class="form-control" required>
+                                        </div>
+                                       <div
+                                                class="form-group">
+                                            <!-- eto le select atao aona le -->
+                                            <label>Nom</label>
+                                            <select id="personne{{ materiel.id }}" name="personne">
+                                                <option value="{{ materiel.personnes.id }}">{{ materiel.personnes.nomPersonne }}</option>
+                                                {% for pt in listPt %}
+                                                    {% if pt.id != materiel.personnes.id %}
+                                                        <option value="{{ pt.id }}">{{ pt.nomPersonne }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                        <input type="submit" class="btn btn-info" value="Save">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <a href="{{ path('delete_materiel', {'id': materiel.id}) }}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                 </td>
                 </tbody>
             {% endfor %}
 
         </table>
+        <div class="clearfix">
+            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+            <ul class="pagination">
+                <li class="page-item">{{ knp_pagination_render(materiels) }}</li>
+            </ul>
+        </div>
     </div>
 </div>
 <!-- Edit Modal HTML -->
