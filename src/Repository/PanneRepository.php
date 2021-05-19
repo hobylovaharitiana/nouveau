@@ -72,4 +72,19 @@ class PanneRepository extends ServiceEntityRepository
         return $query->getResult();
 
     }
+
+    public function findPanneByPersonne($id) {
+        $query = $this->createQueryBuilder('p')
+            ->where('p.personnes = :key')
+            ->setParameter('key', $id)->getQuery();
+
+        return $query->getResult();
+    }
+    public function findPanneByMateriel($id) {
+        $query = $this->createQueryBuilder('p')
+            ->where('p.materiel = :key')
+            ->setParameter('key', $id)->getQuery();
+
+        return $query->getResult();
+    }
 }

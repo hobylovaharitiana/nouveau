@@ -26,7 +26,7 @@ class PersonneFormType extends AbstractType
                 return $personneType->getNomType();
                 }
             ])
-            ->add('submit', SubmitType::class)
+            ->add('ajouter', SubmitType::class)
         ;
     }
 

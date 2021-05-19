@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\ProblemeMateriel;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Json;
@@ -14,7 +16,7 @@ class ProblemeController extends AbstractController
     /**
      * @Route("/probleme", name="read_probleme")
      */
-    public function listeProbleme()
+    public function listeProbleme(Request $request, PaginatorInterface $paginator)
     {
         $probleme = new ProblemeMateriel();
         $problemes = $this->getDoctrine()->getRepository(ProblemeMateriel::class)->getListeProbleme();
@@ -40,8 +42,10 @@ class ProblemeController extends AbstractController
 
         //dd($problemes);
         //$probleme->g
+
         return $this->render("probleme/probleme.html.twig", [
-            "nombrepanne" => $nombrepanne, "nomMateriel" => $nomMateriel, "comptes" => $comptes -1
+            "nombrepanne" => $nombrepanne, "nomMateriel" => $nomMateriel, "comptes" => $comptes -1,
+            "problemes" => $problemes,
        ]);
     }
 }

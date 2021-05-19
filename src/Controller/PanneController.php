@@ -219,9 +219,10 @@ class PanneController extends AbstractController
     }
 
     /**
-     * @Route("/edit-personne", name="edit_panne")
+     * @Route("/edit-panne", name="edit_panne")
      */
     public function editPanne(Request $request) {
+
         //if($request->isMethod('POST')) {
         $typePanne = $request->request->get('typePanne');
         $materiel = $request->request->get('materiel');
@@ -244,10 +245,16 @@ class PanneController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $panne = $entityManager->getRepository(Panne::class)->find($id);
-        $entityManager->remove($panne);
-        $entityManager->flush();
-        return $this->redirectToRoute("read_panne");
-    }
+        $probleme = $entityManager->getRepository(ProblemeMateriel::class)->findProblemeByPanne($id);
+if ($probleme == null){
+    $entityManager->remove($panne);
+    $entityManager->flush();
+    return $this->redirectToRoute("read_panne");
+}
+else{
+    return $this->redirectToRoute("read_panne");
+}
+        }
     /**
      * @Route("/panne", name="liste_panne")
      */

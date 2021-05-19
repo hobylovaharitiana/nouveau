@@ -18,7 +18,7 @@ class MaterielFormType extends AbstractType
             ->add('nomMateriel')
             ->add('marqueMateriel')
             ->add('caracteristique')
-            ->add('submit', SubmitType::class)
+            ->add('ajouter', SubmitType::class)
 
         ;
     }

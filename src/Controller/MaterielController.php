@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Materiel;
+use App\Entity\Panne;
 use App\Entity\Personne;
 use App\Entity\ProblemeMateriel;
 use App\Form\MaterielFormType;
@@ -193,10 +194,18 @@ class MaterielController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $materiel = $entityManager->getRepository(Materiel::class)->find($id);
+        $panne = $entityManager->getRepository(Panne::class)->findPanneByMateriel($id);
+        $probleme = $entityManager->getRepository(ProblemeMateriel::class)->findProblemeByMateriel($id);
+
+    if ($panne == null && $probleme == null){
         $entityManager->remove($materiel);
         $entityManager->flush();
 
         return $this->redirectToRoute("read_materiel");
+    }
+    else{
+        return $this->redirectToRoute('read_materiel');
+       }
     }
     }
 

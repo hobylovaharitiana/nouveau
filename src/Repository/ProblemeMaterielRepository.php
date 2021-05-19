@@ -74,4 +74,18 @@ class ProblemeMaterielRepository extends ServiceEntityRepository
             GROUP BY m.id '
         )->getArrayResult();
     }
+    public function findProblemeByMateriel($id) {
+        $query = $this->createQueryBuilder('p')
+            ->where('p.materiel = :key')
+            ->setParameter('key', $id)->getQuery();
+
+        return $query->getResult();
+    }
+    public function findProblemeByPanne($id) {
+        $query = $this->createQueryBuilder('p')
+            ->where('p.panne = :key')
+            ->setParameter('key', $id)->getQuery();
+
+        return $query->getResult();
+    }
 }

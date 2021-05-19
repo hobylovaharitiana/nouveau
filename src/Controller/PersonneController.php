@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Materiel;
+use App\Entity\Panne;
 use App\Entity\Personne;
 use App\Entity\PersonneType;
 use App\Form\PersonneFormType;
@@ -40,7 +41,7 @@ class PersonneController extends AbstractController
         ]);*/
         return $this->render('personne/modal.html.twig', [
             "form_title" => "Ajouter un personne",
-            "form_product" => $form->createView(),
+            "form" => $form->createView(),
         ]);
     }
     /**
@@ -75,13 +76,64 @@ class PersonneController extends AbstractController
             $pers,
             $request->query->getInt('page', 1),5
         );
-        return $this->render('personne/personnes.html.twig', [
-            "listPt" => $listPt,
-            "personnes" => $personnes,
-            "form_title" => "Ajouter un personne",
-            "form_product" => $form->createView(),
 
-        ]);
+        $action = $request->request->get('action');
+        $idPersonne = $request->request->get('idPersonne');
+
+        //debut suppression de personne
+        if ($action != null){
+            $entityManager = $this->getDoctrine()->getManager();
+            $personne = $entityManager->getRepository(Personne::class)->find($idPersonne);
+            $materiel = $entityManager->getRepository(Materiel::class)->findMerielByPersonne($idPersonne);
+            $panne = $entityManager->getRepository(Panne::class)->findPanneByPersonne($idPersonne);
+
+            if ($materiel == null && $panne == null){
+                $entityManager->remove($personne);
+                $entityManager->flush();
+                return $this->redirectToRoute('read_personne', [
+                    "listPt" => $listPt,
+                    "personnes" => $personnes,
+                    "form_title" => "Ajouter un personne",
+                    "form" => $form->createView(),
+                    "messages" => "Personne supprime",
+                ]);
+            }
+            else if ($materiel != null){
+                return $this->render('personne/personnes.html.twig',[
+                    "listPt" => $listPt,
+                    "personnes" => $personnes,
+                    "form_title" => "Ajouter un personne",
+                    "form" => $form->createView(),
+                    "messages"=>"On ne doit pas supprimer cette personne car il ocuppe un materiel",
+                ]);
+            }
+            else if ($panne != null){
+                return $this->render('personne/personnes.html.twig',[
+                    "listPt" => $listPt,
+                    "personnes" => $personnes,
+                    "form_title" => "Ajouter un personne",
+                    "form" => $form->createView(),
+                    "messages"=>"On ne doit pas supprimer cette personne car il a deja deppanner un panne",
+                ]);
+            }
+            else{
+                return $this->redirectToRoute('read_personne');
+            }
+        }
+       if ($form->isSubmitted() && $form->isValid())
+       {
+           $entityManager = $this->getDoctrine()->getManager();
+           $entityManager->persist($personne);
+           $entityManager->flush();
+           return $this->redirectToRoute('read_personne');
+       }
+       return $this->render('personne/personnes.html.twig', [
+           "listPt" => $listPt,
+           "personnes" => $personnes,
+           "form_title" => "Ajouter un personne",
+           "form" => $form->createView(),
+           "messages"=>"",
+       ]);
     }
     /**
      * @Route ("/modify-personne/{id}", name="modify_personne")
@@ -142,7 +194,10 @@ class PersonneController extends AbstractController
         $materiel = $entityManager->getRepository(Materiel::class)->findMerielByPersonne($id);
         //dd($materiel);
 
-        if ($materiel == null) {
+        $panne = $entityManager->getRepository(Panne::class)->findPanneByPersonne($id);
+
+
+        if ($materiel == null && $panne == null) {
             $entityManager->remove($personne);
             $entityManager->flush();
             return $this->redirectToRoute('read_personne');
