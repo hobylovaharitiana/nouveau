@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Direction</title>
+    <title>Personne</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -12,16 +12,25 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="js/personnes.js"></script>
+    <script src="js/nav.js"></script>
 
     <link rel="stylesheet" href="cssnv/stylepers.css">
     <link rel="stylesheet" href="cssboot/style.css">
     <link rel="stylesheet" href="fontawesome/font.css">
     <link rel="stylesheet" href="cssboot/icon.css">
-
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="cssnv/w3.css">
+    <link rel="stylesheet" href="cssboot/roboto.css">
+    <link rel="stylesheet" href="cssboot/roboto.css">
     <link rel="stylesheet" href="style.css">
+
+
     <style>
+
+        .w3-container{
+            color: dodgerblue;
+        }
+        .w3-modal-content w3-card-4 w3-animate-zoom{
+            color: black;
+        }
         .contenu{
             font-family: Verdana,sans-serif;
             font-weight: 20px;
@@ -31,7 +40,7 @@
         }
 
         body{
-            background-image:  url("/images/EX.jpg");
+            background-image:  url("/images/ACCUEIL.jpg");
             color: #f1f1f1;
             font-family: "cursive";
 
@@ -57,18 +66,28 @@
             padding: 16px 30px;
             margin: -20px -25px 10px;
             border-radius: 3px 3px 0 0;
+
+        }
+        .modal-title, .form-group{
+            color: black;
+        }
+        .ajout{
+            color: black;
         }
     </style>
 
 </head>
-<body>
+
+
+<body >
+
 
 <nav class="navbar">
         <span class="navbar-toggle" id="js-navbar-toggle">
             <i class="fas fa-bars"></i>
         </span>
     <li>
-        <a href="{{ path('accueil') }}" class="nav-links">Accueil</a>
+        <a href="{{ path('read_direction') }}" class="nav-links">Direction</a>
     </li>
     <li>
         <a href="{{ path('read_service') }}" class="nav-links">Service</a>
@@ -90,50 +109,13 @@
 </nav>
 
 
-<div class="container">
-    <div class="table-wrapper">
-        <div class="table-title">
-            <div class="row">
-                <div class="col-sm-6">
-                    <h2>Direction</h2>
-                </div>
-            </div>
-        </div>
-
-        <table class="table table-striped table-hover">
-            <thead>
-            <tr class="titre">
-                <th></th>
-                <th>id</th>
-                <th>Nom</th>
-                <th>Libelle</th>
-            </tr>
-            </thead>
-            {% for direction in directions %}
-            <tbody class="contenu">
-                <td></td>
-                <td>{{ direction.id }}</td>
-                <td>{{ direction.Nom }}</td>
-                <td>{{ direction.Libelle }}</td>
-            </tbody>
-            {% endfor %}
 
 
-        </table>
-
-        <div class="clearfix">
-             <ul class="pagination">
-                <li class="page-item">{{ knp_pagination_render(directions) }}</li>
-
-            </ul>
-        </div>
-
-    </div>
-</div>
-<!-- Edit Modal HTML -->
 
 
-<!-- Edit Modal HTML -->
+
+
+
 
 </body>
 </html>
